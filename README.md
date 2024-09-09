@@ -1,5 +1,5 @@
 SimplePasswordManager
-#### Video Demo:  <URL HERE>
+#### Video Demo:  <https://youtu.be/NRzUpbj7ZuE>
 #### Description:
 This project is a command-line tool for generating, encrypting, storing, and retrieving passwords. 
 It uses AES-256 encryption for securing the generated passwords which it simply manages in a text file. The program will create an "encryption_key.txt" file with a newly generated encryption key if file does not exist else program will continue using this key. 
