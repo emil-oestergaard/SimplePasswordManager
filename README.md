@@ -1,4 +1,4 @@
-SimplePasswordManager
+# SimplePasswordManager
 #### Video Demo:  <https://youtu.be/NRzUpbj7ZuE>
 #### Description:
 This project is a command-line tool for generating, encrypting, storing, and retrieving passwords. 
