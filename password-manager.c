@@ -14,7 +14,7 @@ void generate_password(int length, const char *characters, char *password);
 void save_to_file(FILE *file, const char *title, const unsigned char *encrypted_password, int encrypted_password_len);
 int encrypt_password(const unsigned char *key, const unsigned char *plaintext, unsigned char *ciphertext, int *ciphertext_len);
 int decrypt_password(const unsigned char *key, const unsigned char *ciphertext, int ciphertext_len, unsigned char *plaintext, int *plaintext_len);
-void hex_to_bin(const char *hex, unsigned char *bin, int *bin_len);
+int hex_to_bin(const char *hex, unsigned char *bin, int *bin_len);
 
 const char *ALPHA_NUMERIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 const char *SPECIAL_CHARS = "!@#$%^&*()-_=+[]{}|;:',.<>?";
@@ -126,7 +126,20 @@ int main(int argc, char *argv[])
                     
                     unsigned char encrypted_password[1024];
                     int encrypted_password_len;
-                    hex_to_bin(encrypted_password_hex, encrypted_password, &encrypted_password_len);
+                    int hex_to_bin_result = hex_to_bin(encrypted_password_hex, encrypted_password, &encrypted_password_len);
+
+                    if (hex_to_bin_result != 0) 
+                    {
+                        printf("Conversion of hexadecimal to binary number failed.\n");
+                        for (size_t i = 0; i < size; i++) 
+                        {
+                            free(entries[i].title);
+                            free(entries[i].encrypted_password);
+                        }
+                        free(entries);
+                        fclose(passwords_file);
+                        return 1;
+                    }
 
                     if (size == capacity) 
                     {
@@ -442,14 +455,14 @@ int decrypt_password(const unsigned char *key, const unsigned char *ciphertext, 
     return 0;
 }
 
-void hex_to_bin(const char *hex, unsigned char *bin, int *bin_len)
+int hex_to_bin(const char *hex, unsigned char *bin, int *bin_len)
 {
     int len = strlen(hex);
     if (len % 2 != 0)
     {
         printf("Invalid hexadecimal string length\n");
         *bin_len = 0;
-        return;
+        return 1;
     }
 
     *bin_len = len / 2;
@@ -457,4 +470,6 @@ void hex_to_bin(const char *hex, unsigned char *bin, int *bin_len)
     {
         sscanf(hex + 2 * i, "%2hhx", &bin[i]);
     }
+
+    return 0;
 }
